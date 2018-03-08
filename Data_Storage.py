@@ -7,11 +7,11 @@ from datetime import date, datetime, timedelta
 import mysql.connector
 
 #Method to open a connection to the database
-def establish_connection(config)
+def establish_connection(config):
     try:
         #Attempts to access the database using our config dictionary.
         entry = mysql.connector.connect(**config)
-    except mySQL.connector.Error as err:
+    except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Access has been denied.")
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
@@ -31,7 +31,6 @@ def create_database(entry, DB_NAME):
         print("Failed to create a database.").format(err)
         exit(1)
     cursor.close()
-    entry.close()
 
 #Method to create a table
 def create_table(entry, TABLE_NAME):
@@ -40,7 +39,7 @@ def create_table(entry, TABLE_NAME):
         try:
             print("Creating table {}: ".format(TABLE_NAME), end='')
             cursor.execute(ddl)
-        except mysql.connector.Error as err:
+        except mySQL.connector.Error as err:
             if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
                 print("already exists.")
             else:
@@ -48,7 +47,6 @@ def create_table(entry, TABLE_NAME):
         else:
             print("OK")
     cursor.close()
-    entry.close()
 
 #Method to add data to a table
 def add_data(entry, TABLE_NAME, table_data):

@@ -9,14 +9,6 @@ import DataStore
 #Generic imports
 import time
 
-#Creates a dictonary of the database login
-config = {
-    'user' : 'user',
-    'password' : 'password',
-    'host' : '127.0.0.1',
-    'database' : 'SENSOR_DATA',
-    }
-
 #Pin data for the LCD connections
 pins_data = [D0, D1, D2, D3, D4, D5, D6, D7] #Only use [D0, D1, D2, D3] for a 4-bit set-up.
 pin_rs = R0
