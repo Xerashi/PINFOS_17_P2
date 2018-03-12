@@ -7,11 +7,11 @@ from datetime import date, datetime, timedelta
 import mysql.connector
 
 #Method to open a connection to the database
-def establish_connection(config)
+def establish_connection(config):
     try:
         #Attempts to access the database using our config dictionary.
         entry = mysql.connector.connect(**config)
-    except mySQL.connector.Error as err:
+    except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Access has been denied.")
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
@@ -31,7 +31,6 @@ def create_database(entry, DB_NAME):
         print("Failed to create a database.").format(err)
         exit(1)
     cursor.close()
-    entry.close()
 
 #Method to create a table
 def create_table(entry, TABLE_NAME):
@@ -48,7 +47,6 @@ def create_table(entry, TABLE_NAME):
         else:
             print("OK")
     cursor.close()
-    entry.close()
 
 #Method to add data to a table
 def add_data(entry, TABLE_NAME, table_data):
@@ -63,13 +61,13 @@ def add_data(entry, TABLE_NAME, table_data):
     entry.close()
 
 #Method to query a table for data
-def query_data(entry, TABLE_NAME, query_start, query_end):
+def query_data(entry, TABLE_NAME, threshold_one):
     cursor = entry.cursor()
 
     query = ("SELECT sensor_name, raw_data, time_stamp FROM " + TABLE_NAME + " "
-             "WHERE time_stamp BETWEEN %s AND %s")
+             "WHERE raw_data >= " + threshold_one + " LIMIT 2")
 
-    cursor.execute(query, (query_start, query_end))
+    cursor.execute(query)
     for (sensor_name, raw_data, time_stamp) in cursor:
         print("{} had a value of {} at {:%d %b %Y}.").format(sensor_name, raw_data, time_stamp)
     cursor.close()

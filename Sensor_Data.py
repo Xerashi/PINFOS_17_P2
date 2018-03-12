@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import * from Data_Storage
 
 #GPIO Set to PIN numbering system
 GPIO.setmode(GPIO.BCM)
@@ -8,7 +9,8 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(2, GPIO.IN)
 
 #Method to Cycle Light Sensor
-def light_sense():
+def light_cycle():
+    #Resets the counter for every itteration
     count = 0
 
     #Reset's the PIN on slot 3
@@ -24,31 +26,23 @@ def light_sense():
     #Creates an incremental loop to detect while the light isn't full power, it counts up approximately 1 second
     while GPIO.input(3) == GPIO.LOW:
         count += 1
-    print("light: " + str(count))
+    return count
 
 #Method to print the approximate light value to console every 2 seconds
-def light_value(attempt):
-
+def sensor_value(sensor_name, value):
     #Converts the sensor value, and interation number to strings
-    attempt = str(attempt)
-    sensor_value = str(GPIO.input(2))
+    sensor_value = value
 
-    #If the pin output is set to 1/HIGH it produces the approximate value of the sensor
-    if GPIO.input(2) == 1:
-        print("Iteration " + attempt + ": " + sensor_value + ".")
+    #Prints out the sensor name and value based on whats passed into the method
+    if sensor_name != null && sensor_value != null:
+        print(sensor_name + ": " + sensor_value + ".")
         time.sleep(2)
-
-    #If the PIN output is set to 0/LOW it just submits a value of 0 for the sensor    
     else:
-        print("Iteration " + attempt + ": " + str(0))
-        time.sleep(2)
+        print("Missing Sensor Values.")
 
-#Creates a number to establish increments
-i = 1
-
-#Loop to run the 2 methods in a cycle
-while i > 0:
-    light_sense()
-    value(i)
-    #Increases the increment number
-    i += 1
+#Method to cycle both sensors counts and values
+def cycle_sensors():
+    light_var = str(light_cycle())
+    water_var = str(GPIO.input(2))
+    sensor_value("Light", light_var)
+    sensor_value("Water", water_var)
