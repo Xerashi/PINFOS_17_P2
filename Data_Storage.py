@@ -39,7 +39,7 @@ def create_table(entry, TABLE_NAME):
         try:
             print("Creating table {}: ".format(TABLE_NAME), end='')
             cursor.execute(ddl)
-        except mySQL.connector.Error as err:
+        except mysql.connector.Error as err:
             if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
                 print("already exists.")
             else:
@@ -61,13 +61,13 @@ def add_data(entry, TABLE_NAME, table_data):
     entry.close()
 
 #Method to query a table for data
-def query_data(entry, TABLE_NAME, query_start, query_end):
+def query_data(entry, TABLE_NAME, threshold_one):
     cursor = entry.cursor()
 
     query = ("SELECT sensor_name, raw_data, time_stamp FROM " + TABLE_NAME + " "
-             "WHERE time_stamp BETWEEN %s AND %s")
+             "WHERE raw_data >= " + threshold_one + " LIMIT 2")
 
-    cursor.execute(query, (query_start, query_end))
+    cursor.execute(query)
     for (sensor_name, raw_data, time_stamp) in cursor:
         print("{} had a value of {} at {:%d %b %Y}.").format(sensor_name, raw_data, time_stamp)
     cursor.close()

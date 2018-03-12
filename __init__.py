@@ -8,6 +8,7 @@ from Sensor_Data import *
 from Display_Structure import *
 from Data_Storage import *
 from Operations import *
+from State_Logic import *
 
 #Creates a dictonary of the database login
 config = {
@@ -29,11 +30,11 @@ def __init__(self):
     cycle_sensors()
 
     #Creates data-arrays for the light and water sensor
-    light_data = {"Light Sensor", str(light_value()), current_date}
-    water_data = {"Water Sensor", str(GPIO.input(3)), current_date}
+    light_data = {"Light Sensor", light_value(), current_date}
+    water_data = {"Water Sensor", GPIO.input(3), current_date}
 
     #Checks which face the LCD should be displaying
-    state = state_check(light_data[1], water_data[1])
+    state = state_check(light_data[1], water_data[1], config)
 
     #Pushes the correct state to the screen
     modify_display(state)
@@ -52,4 +53,22 @@ def __init__(self):
 
     #Takes a 10 minute break from calculating
     time.sleep(600)
+
+    #Sensor to image interpretation
+    if GPIO.input(2) == 0:
+        state = state + 1
+
+    elif GPIO.input(2) == 1:
+        print("STATUS OKAY")
+
+    elif GPIO.input(3) > 75:
+        if database_verify() == True:
+            state = state + 1
+            flag = True
+        elif database_verify() == False:
+            flag = False
+
+    elif GPIO.input(3) < 75:
+        print("STATUS OKAY")
+        flag = False 
 
