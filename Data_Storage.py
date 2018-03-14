@@ -1,4 +1,4 @@
-#Python script containing methods to interface with a MySQL server
+    #Python script containing methods to interface with a MySQL server
 
 #Importing required base libraries
 from __future__ import print_function
@@ -17,7 +17,7 @@ def establish_connection(config):
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
             print("Database does not exist.")
         else:
-            print(err)
+            print(err)  
     else:
         entry.close()
     return entry
@@ -58,7 +58,6 @@ def add_data(entry, TABLE_NAME, table_data):
     emp_no = cursor.lastrowid
     entry.commit()
     cursor.close()
-    entry.close()
 
 #Method to query a table for data
 def query_data(entry, TABLE_NAME, threshold_one):
@@ -71,4 +70,3 @@ def query_data(entry, TABLE_NAME, threshold_one):
     for (sensor_name, raw_data, time_stamp) in cursor:
         print("{} had a value of {} at {:%d %b %Y}.").format(sensor_name, raw_data, time_stamp)
     cursor.close()
-    entry.close()
