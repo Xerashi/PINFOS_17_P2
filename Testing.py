@@ -2,44 +2,45 @@
 # 1. Valid installation of MySQL
 # 2. Path access to Python3 as Python
 # 3. Properly installed mysql-connector library 
-
-import RPi.GPIO as GPIO
 import time
 import math
+import mysql.connector
 
-from Sensor_Data import *
-from Display_Structure import *
+from Database_Generator import populate_database, remove_database
 from Data_Storage import *
 from Operations import *
-from State_Logic import *
-from Database_Generator import *
 
 #Main loop logic for testing information
-config_true = {
-    'username' : 'admin',
-    'password' : 'password',
+config = {
+    'user':'root',
+    'password':'password',
 }
 
 config_false = {
-    'username' : 'name',
+    'user' : 'name',
     'password' : 'pass',
+    'host' : '127.0.0.1',
 }
 
-#Error testing an error with login response
-if establish_connection(config_false) == error:
-    print("Status: Okay")
-else:
-    print("Status: Error")
 
-#Error testing an expected true login response    
-if establish_connection(config_true) == fact:
-    print("Status: Okay")
-else:
-    print("Status: Error")
-
+entry = establish_connection()
+print(entry)
+#Appends the database to the dictionary
+config['database'] = 'TEST_DB'
 #Uses the generate_database method in Database_Generator.py to create a test database.
-generate_database(config_true)
+populate_database(entry)
 
+entry = establish_connection()
+light_data = query_data(entry, 'LIGHT_SENSOR', 40)
+water_data = query_data(entry, 'WATER_SENSOR', 1)
+
+for i in light_data:
+    print(i)
+for i in water_data:
+    print(i)
+
+get_interval(light_data[1][2], light_data[0][2])
+get_interval(water_data[0][2], water_data[1][2])
 #To implement: 
 # 1. Database queries for information handling to view non-negative timescales.
 # 2. State handling and proper returned value based off spoofed data.

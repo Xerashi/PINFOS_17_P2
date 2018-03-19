@@ -30,8 +30,8 @@ def __init__(self):
     cycle_sensors()
 
     #Creates data-arrays for the light and water sensor
-    light_data = {"Light Sensor", light_value(), current_date}
-    water_data = {"Water Sensor", GPIO.input(3), current_date}
+    light_data = ["Light Sensor", light_value(), current_date]
+    water_data = ["Water Sensor", GPIO.input(3), current_date]
 
     #Checks which face the LCD should be displaying
     state = state_check(light_data[1], water_data[1], config)
