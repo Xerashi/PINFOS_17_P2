@@ -30,8 +30,8 @@ def __init__(self):
     cycle_sensors()
 
     #Creates data-arrays for the light and water sensor
-    light_data = {"Light Sensor", light_value(), current_date}
-    water_data = {"Water Sensor", GPIO.input(3), current_date}
+    light_data = ["Light Sensor", light_value(), current_date]
+    water_data = ["Water Sensor", GPIO.input(3), current_date]
 
     #Checks which face the LCD should be displaying
     state = state_check(light_data[1], water_data[1], config)
@@ -54,21 +54,10 @@ def __init__(self):
     #Takes a 10 minute break from calculating
     time.sleep(600)
 
-    #Sensor to image interpretation
-    if GPIO.input(2) == 0:
-        state = state + 1
-
-    elif GPIO.input(2) == 1:
-        print("STATUS OKAY")
-
-    elif GPIO.input(3) > 75:
-        if database_verify() == True:
-            state = state + 1
-            flag = True
-        elif database_verify() == False:
-            flag = False
-
-    elif GPIO.input(3) < 75:
-        print("STATUS OKAY")
-        flag = False 
-
+#To implement:
+# 1. All of the code for the display to function.
+# 2. Display interaction based off the state value interpreted from the sensor data.
+# 3. Validated testing and logging for errors and potential issues.
+# 4. Database sanitation and security.
+# 5. Refining the code implementations, methods, presentation, etc.
+# 6. Writing the READ_ME.txt file for tsters, and other people who work on the code.    
