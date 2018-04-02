@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import time
 
 #Other scripts in the directory
+from PiTest_Animated import *
 from Sensor_Data import *
 from Display_Structure import *
 from Data_Storage import *
@@ -33,11 +34,62 @@ def __init__(self):
     light_data = ["Light Sensor", light_value(), current_date]
     water_data = ["Water Sensor", GPIO.input(3), current_date]
 
-    #Checks which face the LCD should be displaying
-    state = state_check(light_data[1], water_data[1], config)
-
-    #Pushes the correct state to the screen
-    modify_display(state)
+    state = 0
+    state_water = 0
+    state_light = 0
+    state_water = 0
+    StartupAnim()
+    while True:
+        if GPIO.input(27) == GPIO.HIGH: #Killswitch
+            pygame.quit()
+        light_value = LightSensor(60)
+        water_value = WaterSensor()
+        if light_value == 1 and water_value == 1:
+            face = 1
+            state_water = 1
+        if light_value == 0 and water_value == 1:
+            face = 2
+            state_water = 1
+        if light_value == 1 and water_value == 0:
+            face = 3
+            state_water = 0
+        if light_value == 0 and water_value == 0:
+            face = 4
+            state_water = 0
+        if face != state:
+            if state_water == 1:
+                WaterAnim()
+            if face == 1:
+                while light_value == 1 and water_value == 1:
+                    light_value = LightSensor(60)
+                    water_value = WaterSensor()
+                    HappyBlink(3)
+                    if GPIO.input(27) == GPIO.HIGH: #Killswitch
+                        pygame.quit()
+            if face == 2:
+                while light_value == 0 and water_value == 1:
+                    light_value = LightSensor(60)
+                    water_value = WaterSensor()
+                    OkayBlink(3)
+                    if GPIO.input(27) == GPIO.HIGH: #Killswitch
+                        pygame.quit()
+            if face == 3:
+                while light_value == 1 and water_value == 0:
+                    light_value = LightSensor(60)
+                    water_value = WaterSensor()
+                    SadCry(3)
+                    if GPIO.input(27) == GPIO.HIGH: #Killswitch
+                        pygame.quit()
+            if face == 4:
+                while light_value == 0 and water_value == 0:
+                    light_value = LightSensor(60)
+                    water_value = WaterSensor()
+                    DeadAni(3)
+                    if GPIO.input(27) == GPIO.HIGH: #Killswitch
+                        pygame.quit()
+            #DisplayFace(face)
+            state = face
+        time.sleep(1)
 
     #Connects to mySQL server
     entry = establish_connection(config)
